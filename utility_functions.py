@@ -15,10 +15,13 @@ logger = logging.getLogger("starrypy.utility_functions")
 def give_item_to_player(player_protocol, item, count=1):
     logger.debug("Attempting to give item %s (count: %s) to %s", item, count, player_protocol.player.name)
     item_count = int(count)
-    hard_max = 90000
+    hard_max = 900000
     if item_count > hard_max:
         logger.warn("Attempted to give more items than the max allowed (%s). Capping amount.", hard_max)
         item_count = hard_max
+    
+    """
+    sends all items as a single packet instead of multiple 1000
     maximum = 1000
     given = 0
     while item_count > 0:
@@ -30,8 +33,11 @@ def give_item_to_player(player_protocol, item, count=1):
         item_count -= x
         given += x
     return given
-
-
+    """
+    item_packet = build_packet(packets.Packets.GIVE_ITEM, packets.give_item_write(item, item_count))
+    player_protocol.transport.write(item_packet)
+    return item_count
+    
 def recursive_dictionary_update(d, u):
     for k, v in u.iteritems():
         if isinstance(v, collections.Mapping):
