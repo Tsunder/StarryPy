@@ -1,7 +1,7 @@
 from base_plugin import SimpleCommandPlugin
 from plugins.core.player_manager import UserLevels, permissions
 from packets import entity_create, EntityType, star_string, entity_interact_result, InteractionType
-from utility_functions import extract_name
+from utility_functions import extract_name, give_item_to_player
 
 
 class PlanetProtectPlugin(SimpleCommandPlugin):
@@ -169,8 +169,13 @@ class PlanetProtectPlugin(SimpleCommandPlugin):
                 entities = entity_create().parse(data.data)
                 for entity in entities.entity:
                     self.logger.vdebug("Entity Type: %s", entity.entity_type)
+                    ##sending items back to creator
+                    if entity.entity_type == EntityType.ITEMDROP:
+                        give_item_to_player(self.protocol.player.protocol, entity.name, entity.count, entity.parameters)
+                        return False
                     if entity.entity_type == EntityType.PROJECTILE:
-                        self.logger.vdebug("projectile detected")
+                        ## redundant line?
+                        ## self.logger.vdebug("projectile detected")
                         if self.block_all:
                             return False
                         p_type = star_string("").parse(entity.payload)
