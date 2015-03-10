@@ -171,7 +171,8 @@ class PlanetProtectPlugin(SimpleCommandPlugin):
                     self.logger.vdebug("Entity Type: %s", entity.entity_type)
                     ##sending items back to creator
                     if entity.entity_type == EntityType.ITEMDROP:
-                        give_item_to_player(self.protocol.player.protocol, entity.name, entity.count, entity.parameters)
+                        self.logger.vdebug("self.protocol.player.protocol: %s\nentity.name: %s\nentity.count: %s\nentity.parameters: %s", entity.name, entity.count, str(entity.parameters))
+                        ##give_item_to_player(self.protocol.player.protocol, entity.name, entity.count, entity.parameters)
                         return False
                     if entity.entity_type == EntityType.PROJECTILE:
                         ## redundant line?
