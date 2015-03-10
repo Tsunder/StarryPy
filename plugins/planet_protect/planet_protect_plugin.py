@@ -172,6 +172,7 @@ class PlanetProtectPlugin(SimpleCommandPlugin):
                     ##sending items back to creator
                     if entity.entity_type == EntityType.ITEMDROP:
                         self.logger.vdebug("self.protocol.player.protocol: %s\nentity: %s", str(entity))
+                        give_item_to_player(self.protocol.player.protocol, entity.name, entity.count)
                         ##give_item_to_player(self.protocol.player.protocol, entity.name, entity.count, entity.parameters)
                         return False
                     if entity.entity_type == EntityType.PROJECTILE:
