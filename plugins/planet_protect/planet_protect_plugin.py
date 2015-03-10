@@ -160,7 +160,7 @@ class PlanetProtectPlugin(SimpleCommandPlugin):
         self.config.save()  #we want to save permissions just in case
 
     def on_entity_create(self, data):
-        """Projectile protection check"""
+        """Projectile protection check and now w/ items"""
         if self.protocol.player.planet in self.protected_planets and self.protocol.player.access_level < UserLevels.ADMIN:
             name = self.protocol.player.org_name
             if name in self.player_planets[self.protocol.player.planet]:
@@ -172,7 +172,7 @@ class PlanetProtectPlugin(SimpleCommandPlugin):
                     ##sending items back to creator
                     if entity.entity_type == EntityType.ITEMDROP:
                         self.logger.vdebug("self.protocol.player.protocol: %s\nentity: %s", str(entity))
-                        give_item_to_player(self.protocol.player.protocol, entity.name, entity.count)
+                        give_item_to_player(self.protocol.player.protocol, entity.name, entity.count) ##won't work for items expecting parameters. :(
                         ##give_item_to_player(self.protocol.player.protocol, entity.name, entity.count, entity.parameters)
                         return False
                     if entity.entity_type == EntityType.PROJECTILE:
@@ -204,5 +204,5 @@ class PlanetProtectPlugin(SimpleCommandPlugin):
                 entity = entity_interact_result().parse(data.data)
                 if entity.interaction_type == InteractionType.OPEN_CONTAINER:
                     self.logger.vdebug("User %s attmepted to open container ID %s", self.protocol.player.name, entity.target_entity_id)
-                    self.logger.vdebug("This is not permitted.")
+                    ##self.logger.vdebug("This is not permitted.")
                     return False
