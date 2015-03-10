@@ -47,6 +47,8 @@ class IrcPlugin(BasePlugin):
 
     def on_chat_sent(self, data):
         parsed = chat_sent().parse(data.data)
+        if parsed.message.startswith("@@"):
+            return True ##quick dirty removal of @@ messages to administrators from briding over to irc.
         if parsed.send_mode == 'LOCAL':
             return True
         if not parsed.message.startswith('/'):
